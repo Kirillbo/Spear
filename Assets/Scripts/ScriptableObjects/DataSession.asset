@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d363c97165a72041a80900ea308feee, type: 3}
+  m_Name: DataSession
+  m_EditorClassIdentifier: 
+  TimeBetweenShot: 0
+  _score: 0
+  _currentLevel: 0
+  AmountFruit: 8
+  MaxExploisen: 3
+  MaxEasy: 2
+  Diffic:
+  - _amountFruit: 0
+    _maxExploisen: 0
+    _maxEasy: 0
+  - _amountFruit: 11
+    _maxExploisen: 4
+    _maxEasy: 2
+  - _amountFruit: 14
+    _maxExploisen: 5
+    _maxEasy: 2
+  - _amountFruit: 16
+    _maxExploisen: 5
+    _maxEasy: 3
+  - _amountFruit: 18
+    _maxExploisen: 5
+    _maxEasy: 3
+  ScoreForLevelUP: 50000000c800000090010000bc020000e8030000b004000078050000
+  _amountStck: 10
