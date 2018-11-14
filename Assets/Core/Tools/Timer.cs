@@ -22,7 +22,7 @@ using UnityEngine;
         public static void Add(float finishTime, Action method, bool repeat = false)
         {
             var timer = new Timer(finishTime, method, repeat);
-            GameManager.Instance.ESCWorld.Get<ProcessingTimer>().Add(timer);
+            GameManager.Instance.ECSWorld.Get<ProcessingTimer>().Add(timer);
         }
 
         public void Tick()
@@ -48,18 +48,18 @@ using UnityEngine;
 
         public void Stop()
         {
-            GameManager.Instance.ESCWorld.Get<ProcessingTimer>().Remove(this);
+            GameManager.Instance.ECSWorld.Get<ProcessingTimer>().Remove(this);
         }
 
     public void Play()
         {
-            GameManager.Instance.ESCWorld.Get<ProcessingTimer>().Add(this);
+            GameManager.Instance.ECSWorld.Get<ProcessingTimer>().Add(this);
         }
 
 
     void Kill()
     {
-        GameManager.Instance.ESCWorld.Get<ProcessingTimer>().Remove(this);
+        GameManager.Instance.ECSWorld.Get<ProcessingTimer>().Remove(this);
         _callback = null;
     }
 
