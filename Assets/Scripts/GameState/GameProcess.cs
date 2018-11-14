@@ -2,28 +2,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using Homebrew;
+using TMPro;
 using Tools;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-/*
- * режим на время
- * магазин
- */
 
+ //TODO режим на время
+ //TODO магазин
+ //TODO подглагивания про контакте палки с фруктами
 
-//TODO глючит игра при появлении UI
 
 public class GameProcess : AState
 {
     private PoolManager _poolManager;
-    private bool OpenSecretRoom;
     private GameObject[] _arrayFruit;
     private List<GameObject> _listCritFruit = new List<GameObject>();
     public Queue<GameObject> _queueFruits;
     public AngelsSystem[] RespaunFruit;
     public Canvas CanvasGameProcess;
-       
+    public LayerMask Mask;
+
+    private SystemProcessings _systemECS;
+
     [Foldout("Settings")] public float StepAngel;                         //Шаг между углами
     [Foldout("Settings")] public float TimeBetweenShot;                   //Задержка между выстрелами 
     [Foldout("Settings")] public float TimeBetweenFruit;
@@ -33,7 +34,6 @@ public class GameProcess : AState
 
 
     public DataSession DataSessionGame;
-    public LayerMask Mask;
 
 
     public override void Init()
@@ -43,18 +43,19 @@ public class GameProcess : AState
 
     public override void Enter()
     {
-
         if (Manager.NewGame)
         {
             Manager.NewGame = false;
 
             Destroy(Manager.Session);
-            Manager.Session = null;
             Manager.Session = Instantiate(DataSessionGame);
-            new ProcessingCalculateSticks();
-            new ProcessingScore();
-            new ProcessingManyFruit();
-            new ProcessingHP();
+
+            _systemECS = new SystemProcessings();
+            _systemECS.Add<ProcessingCalculateSticks>();
+            _systemECS.Add<ProcessingScore>();
+            _systemECS.Add<ProcessingManyFruit>();
+            _systemECS.Add<ProcessingHP>();
+
 
             ManagerView.Get<BlackAnimationBack>().Curtain(Anim.Open);
         }
@@ -74,7 +75,7 @@ public class GameProcess : AState
     
     IEnumerator IEnumeratorWaveFruit2(int countFruit)
     {
-        Debug.Log("start wave fruits");
+        Debug.Log("Start wave fruits");
         yield return new WaitForSeconds(0.8f);
 
         _listCritFruit.Clear();
@@ -154,9 +155,8 @@ public class GameProcess : AState
 
         if (Manager.GameOver)
         {
-            ProcessingHP.Instance.Dispose();
-            ProcessingCalculateSticks.Instantiate.Dispose();
-            ProcessingScore.Instantiate.Dispose();
+            _systemECS.Clear();
+            _systemECS = null;
             ClearScene();
         }
     }
@@ -187,8 +187,7 @@ public class GameProcess : AState
 
     public override void Tick()
     {
-        
-
+       // _systemEsc.Update();
     }
     
 //    public void EnterSecretRoom()
@@ -218,7 +217,7 @@ public class GameProcess : AState
         if(direction == Vector3.zero) return;
 
         Manager.Session.AmountStck = -1;
-        ManagerSound.Instance.PlayEffect(Track.MoveStick, Channel.Two);
+        ManagerSound.Instance.PlayEffect(Track.MoveStick, Channel.One);
         RaycastHit hit;
 
         if (!Physics.Raycast(position, -direction, out hit, 1000, Mask)) return;
@@ -232,7 +231,6 @@ public class GameProcess : AState
         stick.SetTransform(startPos, Quaternion.Euler(0, 0, angel - 90));
     }
 
-    //TODO подобрать оставшийся звук
     //TODO прикрутить рекламу
 
     public override string GetName()

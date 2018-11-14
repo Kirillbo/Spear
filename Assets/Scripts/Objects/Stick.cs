@@ -83,7 +83,7 @@ public class Stick : MonoBehaviour
         if (_timer > EndTimer)
         {
             _dataObj.VisibleOnCam = true;
-            NewTimer.Add(_dataObj.TimeDestroy, _destroyComponent.Destroy);
+            global::Timer.Add(_dataObj.TimeDestroy, _destroyComponent.Destroy);
         }
     }
 

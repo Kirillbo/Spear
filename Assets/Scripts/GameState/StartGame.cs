@@ -30,7 +30,7 @@ public class StartGame : AState
         switch (param)
         {
             case "StartGame":
-                GameManager.Instance.ChangeState("GameState", 1f);
+               GameManager.Instance.ChangeState("GameState", 1f);
                 break;
 
             case "Settings":
@@ -74,7 +74,7 @@ public class StartGame : AState
 
     public override void Exit()
     {
-        NewTimer.Add(0.5f, () => CanvasGameStart.enabled = false);
+        Timer.Add(0.5f, () => CanvasGameStart.enabled = false);
         ManagerView.Get<BlackAnimationBack>().Curtain(Anim.Close);
     }
 

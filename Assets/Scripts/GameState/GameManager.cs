@@ -23,17 +23,15 @@ public class GameManager : SingltoonBehavior<GameManager>
     [HideInInspector] public PoolManager Pool;
     private AState _activeState;
     private bool _tick = true;
-    private ProcessingTimer _processingTimer;
 
     public bool GameOver;
     public bool NewGame;
+    public SystemProcessings ECSWorld;
 
     protected override void Awake()
     {
         base.Awake();
         Pool = PoolManager.Instance;
-        _processingTimer = ProcessingTimer.Instantiate;
-
         NewGame = true;
         GameOver = false;
     }
@@ -42,8 +40,10 @@ public class GameManager : SingltoonBehavior<GameManager>
     {
         StateDictionary = new Dictionary<string, AState>();
         StateDictionary.Clear();
-        
-        new ProcessingIndicator();      //instance processing
+
+        ECSWorld = new SystemProcessings();
+        ECSWorld.Add<ProcessingTimer>();
+        ECSWorld.Add<ProcessingIndicator>();
         
         foreach (var state in States)
         {
@@ -53,6 +53,7 @@ public class GameManager : SingltoonBehavior<GameManager>
         }
         
         InstanceState("StartGame");
+
     }
     
     
@@ -98,7 +99,7 @@ public class GameManager : SingltoonBehavior<GameManager>
         NewGame = true;
         GameOver = false;
         ChangeState(null);
-        NewTimer.Add(0.7f, () => InstanceState("GameState"));
+        Timer.Add(0.7f, () => InstanceState("GameState"));
     }
 
     public void InstanceState(string stateName)
@@ -110,8 +111,6 @@ public class GameManager : SingltoonBehavior<GameManager>
     
     public void ChangeState(string newState, float delayBetweenState = 0)
     {
-     
-
         if (newState == null)
         {
             _activeState.Exit();
@@ -128,27 +127,16 @@ public class GameManager : SingltoonBehavior<GameManager>
         }
         else
         {
-            NewTimer.Add(delayBetweenState, _activeState.Enter);
+            Timer.Add(delayBetweenState, _activeState.Enter);
         }
 
         Debug.Log("Current Game State - " + _activeState);
     }
-
-    
-    public void StopTick()
-    {
-        _tick = false;
-        Debug.Log("Tick freeze!");
-    }
-
-    public void StartTick()
-    {
-        _tick = true;
-    }
-
     
     void Update () {
-        _processingTimer.Tick();
+        
+        ECSWorld.Update();
+
         if(_activeState == null) return;
         _activeState.Tick();
     }

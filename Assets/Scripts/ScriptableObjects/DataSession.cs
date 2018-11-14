@@ -71,6 +71,6 @@ public class DataSession : ScriptableObject
         {
             GameManager.Instance.ChangeState("LevelUpState", 2f);
         }
-        else NewTimer.Add(5f, ChangeState);
+        else Timer.Add(5f, ChangeState);
     }
 }

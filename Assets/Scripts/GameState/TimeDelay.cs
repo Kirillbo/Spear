@@ -48,12 +48,12 @@ public class TimeDelay : AState
         _centerScreen.Set(_centerScreen.x, _centerScreen.y, TargetObject.position.z);
         CanvasTimeDelay.enabled = true;
 
-        NewTimer.Add(1f, delegate { ChangeZoomAndRotateCam(ZoomForCam, 3, AngelRotateCam);});
-        NewTimer.Add(1f, delegate { MoveObject(TargetObject, _centerScreen, 6); });
-        NewTimer.Add(1f, delegate { RotateObject(TargetObject, -38f, 6); });
-        NewTimer.Add(1.3f, ()=> InputManager.Instance.TouchScreen += ShotStick);
+        Timer.Add(1f, delegate { ChangeZoomAndRotateCam(ZoomForCam, 3, AngelRotateCam);});
+        Timer.Add(1f, delegate { MoveObject(TargetObject, _centerScreen, 6); });
+        Timer.Add(1f, delegate { RotateObject(TargetObject, -38f, 6); });
+        Timer.Add(1.3f, ()=> InputManager.Instance.TouchScreen += ShotStick);
         
-        NewTimer.Add(LifeTimerState, ()=> Manager.ChangeState("GameState", 2f));
+        Timer.Add(LifeTimerState, ()=> Manager.ChangeState("GameState", 2f));
     }
 
     
